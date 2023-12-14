@@ -11,5 +11,12 @@ namespace APItask1.DAL
             
         }
         public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+           modelBuilder.Entity<Category>().Property(c=> c.Name).IsRequired().HasMaxLength(25);
+            
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

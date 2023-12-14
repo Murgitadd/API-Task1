@@ -1,4 +1,5 @@
 using APItask1.DAL;
+using APItask1.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 namespace APItask1
@@ -18,6 +19,7 @@ namespace APItask1
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddScoped<IRepository<T>,Repository<T>();
 
             var app = builder.Build();
 

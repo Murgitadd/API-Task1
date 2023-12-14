@@ -1,8 +1,9 @@
-﻿namespace APItask1.Entities
+﻿using APItask1.Entities.Base;
+
+namespace APItask1.Entities
 {
-    public class Category
+    public class Category : BaseEntity
     {
-        public int Id { get; set; }
         public string Name { get; set; }
     }
 }
