@@ -8,9 +8,9 @@ namespace APItask1.Repositories.Interfaces
         Task<IQueryable<T>> GetAllAsync(Expression<Func<T,bool>> expression=null,params string[] includes);
         Task<T> GetByIdAsync(int id);
 
-        Task AddAsync (T category);
-        void Delete (T category);
-        void UpdateAsync (T category);
+        Task AddAsync (T entity);
+        void Delete (T entity);
+        void UpdateAsync (T entity);
         Task SaveChangesAsync();
     }
 }
