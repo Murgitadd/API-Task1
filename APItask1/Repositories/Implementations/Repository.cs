@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace APItask1.Repositories.Implementations
 {
-    public class Repository <T> : IRepository<T> where T : BaseEntity, new()
+    public class Repository<T> : IRepository<T> where T : BaseEntity, new()
     {
         private readonly DbSet<T> _table;
         private readonly AppDbContext _context;
@@ -25,12 +25,39 @@ namespace APItask1.Repositories.Implementations
             _table.Remove(entity);
         }
 
-        public async Task<IQueryable<T>> GetAllAsync(Expression<Func<T, bool>> expression = null, params string[] includes)
+        public async Task<IQueryable<T>> GetAllAsync(
+            Expression<Func<T, bool>> expression = null, 
+            Expression<Func<T, object>>? orderExpression = null, 
+            bool isDescending = false,
+            int skip = 0,
+            int take = 0,
+            bool isTracking = true,
+            params string[] includes
+            )
         {
             var query= _table.AsQueryable();
             if (expression != null)
             {
                 query = query.Where(expression);
+            }
+            if (orderExpression != null)
+            {
+                if (isDescending)
+                {
+                    query=query.OrderByDescending(orderExpression);
+                }
+                else
+                {
+                    query=query.OrderBy(orderExpression);
+                }
+            }
+            if (skip != 0)
+            {
+                query = query.Skip(skip);
+            }
+            if (take != 0)
+            {
+                query = query.Take(take);
             }
             if (includes != null)
             {
@@ -39,7 +66,7 @@ namespace APItask1.Repositories.Implementations
                     query = query.Include(includes[i]);
                 }
             }
-            return query;
+            return isTracking?query:query.AsNoTracking();
         }
 
         public async Task<T> GetByIdAsync(int id)

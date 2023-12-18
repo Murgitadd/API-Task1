@@ -16,7 +16,7 @@ namespace APItask1.Controllers
         [HttpGet]
         public async Task<IActionResult> Get(int page=1,int take=3)
         {
-            IEnumerable<Category> categories = await _repository.GetAllAsync();
+            IEnumerable<Category> categories = await _repository.GetAllAsync(orderExpression: c => c.Name,skip:(page-1)*take,take:take);
             return Ok(categories);
         }
         [HttpGet("{id}")]
