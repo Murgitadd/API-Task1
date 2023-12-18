@@ -9,7 +9,7 @@ namespace APItask1.Controllers
     {
         private readonly IRepository<Category> _repository;
 
-        public CategoriesController(AppDbContext context, IRepository<Category> repository)
+        public CategoriesController(ICategoryRepository repository)
         {
             _repository = repository;
         }

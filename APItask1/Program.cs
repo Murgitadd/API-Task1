@@ -19,7 +19,7 @@ namespace APItask1
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IRepository<Category>,Repository<Category>>();
+            builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 
             var app = builder.Build();
 
