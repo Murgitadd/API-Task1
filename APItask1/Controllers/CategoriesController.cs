@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using APItask1.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace APItask1.Controllers
@@ -8,16 +9,18 @@ namespace APItask1.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly IRepository<Category> _repository;
+        private readonly ICategoryService _service;
 
-        public CategoriesController(ICategoryRepository repository)
+        public CategoriesController(ICategoryRepository repository, ICategoryService service)
         {
             _repository = repository;
+            _service = service;
         }
         [HttpGet]
         public async Task<IActionResult> Get(int page=1,int take=3)
         {
-            IEnumerable<Category> categories = await _repository.GetAllAsync(orderExpression: c => c.Name,skip:(page-1)*take,take:take);
-            return Ok(categories);
+            //IEnumerable<Category> categories = await _repository.GetAllAsync(orderExpression: c => c.Name,skip:(page-1)*take,take:take);
+            return Ok(await _service.GetAllAsync(page, take));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -26,22 +29,13 @@ namespace APItask1.Controllers
             {
                 return StatusCode(StatusCodes.Status400BadRequest);
             }
-            Category category = await _repository.GetByIdAsync(id);
-            if (category == null)
-            {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }
-            return StatusCode(StatusCodes.Status200OK, category);
+            
+            return StatusCode(StatusCodes.Status200OK, await _service.GetAsync(id));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromForm]CreateCategoryDto categoryDto)
         {
-            Category category = new Category
-            {
-                Name = categoryDto.Name,
-            };
-            await _repository.AddAsync(category);
-            await _repository.SaveChangesAsync();
+            await _service.CreateAsync(categoryDto);
             return StatusCode(StatusCodes.Status201Created);
         }
         [HttpPut("{id}")]

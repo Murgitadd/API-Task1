@@ -25,7 +25,7 @@ namespace APItask1.Repositories.Implementations
             _table.Remove(entity);
         }
 
-        public async Task<IQueryable<T>> GetAllAsync(
+        public IQueryable<T> GetAllAsync(
             Expression<Func<T, bool>> expression = null, 
             Expression<Func<T, object>>? orderExpression = null, 
             bool isDescending = false,
